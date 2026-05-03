@@ -1,0 +1,1 @@
+This is an e-commerce site for PC parts built with Java Servlets, JSP, and JDBC. Users can register, browse components, manage a cart, and checkout. Admins manage inventory and orders. Includes input validation, SQL injection prevention, and automated order confirmation emails.
