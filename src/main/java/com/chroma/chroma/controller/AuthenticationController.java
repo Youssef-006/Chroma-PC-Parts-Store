@@ -17,7 +17,7 @@ public class AuthenticationController {
 
     private final UserService userService;
 
-    // ─── REGISTER ───────────────────────────────────────────────
+    // ─── REGISTER ─────────────────────────────────────────
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
@@ -83,5 +83,10 @@ public class AuthenticationController {
         }
 
         return "redirect:/home";
+    }
+
+    @GetMapping("/home")
+    public String home() {
+        return "home";
     }
 }
