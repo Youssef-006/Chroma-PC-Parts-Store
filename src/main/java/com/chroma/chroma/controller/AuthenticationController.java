@@ -4,6 +4,7 @@ import com.chroma.chroma.dto.LoginDTO;
 import com.chroma.chroma.dto.RegisterDTO;
 import com.chroma.chroma.model.User;
 import com.chroma.chroma.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,7 @@ public class AuthenticationController {
 
     private final UserService userService;
 
-    // ─── REGISTER ─────────────────────────────────────────
+    // ─── REGISTER ───────────────────────────────────────────────
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
@@ -29,9 +30,7 @@ public class AuthenticationController {
     public String handleRegister(@Valid @ModelAttribute("registerDTO") RegisterDTO dto,
                                  BindingResult result,
                                  Model model) {
-        if (result.hasErrors()) {
-            return "register";
-        }
+        if (result.hasErrors()) return "register";
 
         if (userService.existsByEmail(dto.getEmail())) {
             model.addAttribute("error", "Email is already registered.");
@@ -42,7 +41,7 @@ public class AuthenticationController {
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword()); // TODO: BCrypt hash later
+        user.setPassword(dto.getPassword()); // TODO: BCrypt later
 
         userService.save(user);
         return "redirect:/login?registered";
@@ -63,10 +62,9 @@ public class AuthenticationController {
     @PostMapping("/login")
     public String handleLogin(@Valid @ModelAttribute("loginDTO") LoginDTO dto,
                               BindingResult result,
+                              HttpSession session,
                               Model model) {
-        if (result.hasErrors()) {
-            return "login";
-        }
+        if (result.hasErrors()) return "login";
 
         var userOpt = userService.findByEmail(dto.getEmail());
 
@@ -82,11 +80,29 @@ public class AuthenticationController {
             return "login";
         }
 
+        // ✅ Save user to session
+        session.setAttribute("loggedInUser", user);
+        return "redirect:/home";
+    }
+
+    // ─── LOGOUT ──────────────────────────────────────────────────
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate(); // clears everything
+        return "redirect:/login?logout";
+    }
+
+    @GetMapping("/")
+    public String root() {
         return "redirect:/home";
     }
 
     @GetMapping("/home")
-    public String home() {
+    public String home(HttpSession session, Model model) {
+        model.addAttribute("user", session.getAttribute("loggedInUser"));
         return "home";
     }
+
+
 }

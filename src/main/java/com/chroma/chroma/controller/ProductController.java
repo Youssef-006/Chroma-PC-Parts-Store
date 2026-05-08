@@ -1,5 +1,6 @@
 package com.chroma.chroma.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,11 +19,7 @@ public class ProductController {
     ProductRepo repo;
 
     // Thymeleaf view — GET /product → product.html.
-    @GetMapping
-    public String showProducts(Model model) {
-        model.addAttribute("products", repo.findAll());
-        return "product";
-    }
+
 
     // JSON API — GET /product/api
     @GetMapping("/api")
@@ -36,5 +33,14 @@ public class ProductController {
     @ResponseBody
     public Product addProduct(@RequestBody Product product) {
         return repo.save(product);
+    }
+
+    @GetMapping
+    public String showProducts(HttpSession session, Model model) {
+        if (session.getAttribute("loggedInUser") == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("products", repo.findAll());
+        return "product";
     }
 }

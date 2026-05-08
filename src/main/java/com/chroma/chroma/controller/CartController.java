@@ -1,5 +1,6 @@
 package com.chroma.chroma.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,11 +24,6 @@ public class CartController {
     }
 
     // Thymeleaf view — GET /cart → cart.html
-    @GetMapping
-    public String showCart(Model model) {
-        model.addAttribute("cart", cart.getProducts());
-        return "cart";
-    }
 
     // add products
     @PostMapping("/add/{id}")
@@ -59,5 +55,14 @@ public class CartController {
     public String updateQty(@PathVariable Long id, @RequestParam int quantity) {
         productRepo.findById(id).ifPresent(p -> cart.updateQuantity(p, quantity));
         return "Updated";
+    }
+
+    @GetMapping
+    public String showCart(HttpSession session, Model model) {
+        if (session.getAttribute("loggedInUser") == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("cart", cart.getProducts());
+        return "cart";
     }
 }

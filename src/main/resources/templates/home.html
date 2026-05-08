@@ -6,14 +6,16 @@
   <title>Chroma — Build Different</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --ink:    #0e0e0e;
       --paper:  #f5f2ec;
-      --accent: #c0392b;
-      --muted:  #888070;
+      --accent: #0079b5;
+      --muted:  #008bb5;
       --border: #d4cfc6;
       --field:  #ffffff;
     }
@@ -127,11 +129,11 @@
     }
 
     /* ══════════════════════════════════════
-       HERO
+       HERO (grid background removed)
     ══════════════════════════════════════ */
     .hero {
       min-height: 100vh;
-      background: var(--ink);
+      background-image: url('/images/gpu.png');
       display: grid;
       grid-template-columns: 1fr 1fr;
       padding-top: 64px;
@@ -139,16 +141,7 @@
       overflow: hidden;
     }
 
-    /* grid lines background */
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(255,255,255,0.03) 59px, rgba(255,255,255,0.03) 60px),
-        repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(255,255,255,0.03) 59px, rgba(255,255,255,0.03) 60px);
-      pointer-events: none;
-    }
+    /* grid background completely removed (the repeating lines were here) */
 
     .hero-left {
       display: flex;
@@ -335,18 +328,8 @@
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* floating spec chips */
-    .spec-chip {
-      position: absolute;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 0.4rem 0.8rem;
-      font-size: 0.58rem;
-      letter-spacing: 0.15em;
-      color: rgba(255,255,255,0.5);
-      white-space: nowrap;
-      animation: float var(--ft, 4s) ease-in-out infinite;
-    }
+    /* floating spec chips — RTX 5090 removed */
+
 
     @keyframes float {
       0%, 100% { transform: translateY(0); }
@@ -486,7 +469,7 @@
       position: absolute;
       inset: 0;
       background:
-        repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.015) 20px, rgba(255,255,255,0.015) 21px);
+              repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.015) 20px, rgba(255,255,255,0.015) 21px);
     }
 
     .cat-card:hover { transform: translateY(-6px); }
@@ -529,25 +512,18 @@
     }
 
     /* ══════════════════════════════════════
-       FEATURED BANNER
+       FEATURED BANNER (grid background removed)
     ══════════════════════════════════════ */
     .featured-banner {
       margin: 0 3rem 5rem;
-      background: var(--ink);
+      background-image: url("/images/cpu.png");
       display: grid;
       grid-template-columns: 1fr 1fr;
       position: relative;
       overflow: hidden;
     }
 
-    .featured-banner::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(255,255,255,0.03) 59px, rgba(255,255,255,0.03) 60px),
-        repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(255,255,255,0.03) 59px, rgba(255,255,255,0.03) 60px);
-    }
+    /* grid lines completely removed from featured banner */
 
     .featured-content {
       padding: 4rem 3.5rem;
@@ -597,57 +573,7 @@
     }
 
     /* Big GPU art */
-    .gpu-art {
-      width: 240px;
-      height: 120px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.03);
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
 
-    .gpu-fans {
-      display: flex;
-      gap: 8px;
-      padding: 0 16px;
-    }
-
-    .gpu-fan-wrap {
-      width: 50px;
-      height: 50px;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    .gpu-fan-wrap .fan-spin { inset: 3px; border-top-color: rgba(192,57,43,0.7); }
-
-    .gpu-heatsink {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      padding-right: 16px;
-    }
-
-    .heatsink-fin {
-      height: 3px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 1px;
-    }
-
-    .gpu-rgb {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #c0392b, #8e44ad, #2980b9, #c0392b);
-      background-size: 200% 100%;
-      animation: rgbShift 3s linear infinite;
-    }
 
     @keyframes rgbShift {
       from { background-position: 0% 0%; }
@@ -683,7 +609,7 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: 3rem;
       font-weight: 300;
-      color: rgba(192,57,43,0.3);
+      color: rgba(43, 80, 192, 0.484);
       line-height: 1;
       margin-bottom: 1rem;
     }
@@ -699,7 +625,7 @@
     .why-desc {
       font-size: 0.68rem;
       line-height: 1.8;
-      color: rgba(255,255,255,0.35);
+      color: rgba(255, 255, 255, 0.534);
     }
 
     /* ══════════════════════════════════════
@@ -720,7 +646,7 @@
       margin-bottom: 0.75rem;
     }
 
-    .cta-title em { font-style: italic; color: var(--accent); }
+    .cta-title a { font-style: italic; color: var(--accent); }
 
     .cta-sub {
       font-size: 0.7rem;
@@ -814,21 +740,166 @@
       .cta-strip { padding: 3.5rem 1.5rem; }
       footer { padding: 2rem 1.5rem; }
     }
+
+
+    .SocialMedia {
+      text-align: center;
+      padding: px 0;
+    }
+
+    .SocialMedia #ConnectStatement {
+      font-size: 30px;
+      font-weight: bold;
+      color: #1d3557;
+      margin-bottom: 25px;
+      letter-spacing: 1px;
+    }
+
+    .SocialMediaIcons {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .SocialMediaIcons .icon-social {
+      width: 55px;
+      height: 55px;
+      background: #0079b5;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: 0.3s ease;
+    }
+
+    .SocialMediaIcons .icon-social i {
+      color: white;
+      font-size: 32px;
+    }
+
+    .SocialMediaIcons .icon-social:hover {
+      transform: scale(1.1);
+    }
+
+    .support-bar{
+      width: 100%;
+      background: #0e0e0e;
+      padding: 35px 50px;
+      border: solid rgb(0, 0, 0);
+      border-width: 0px 0px 0px 0px;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 40px;
+
+      flex-wrap: wrap;
+    }
+
+    .support-left h2{
+      font-size: 20px;
+      color: #f5f2ecbd;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .support-left p{
+      color: #1679aa;
+      font-size: 15px;
+    }
+
+    .support-right{
+      display: flex;
+      align-items: center;
+      gap: 50px;
+      flex-wrap: wrap;
+    }
+
+    .support-item{
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .support-icon{
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      border: 1px solid #cfd3da;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: white;
+    }
+
+    .support-icon i{
+      font-size: 22px;
+      color: #1d3557;
+    }
+
+    .support-text h3{
+      font-size: 25px;
+      color: #1679aa;
+      font-weight: 500;
+    }
+
+
+
+    @media(max-width: 1000px){
+
+      .support-bar{
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .support-right{
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+
+    @media(max-width: 700px){
+
+      .support-right{
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 25px;
+      }
+
+      .support-left h2{
+        font-size: 30px;
+      }
+
+      .support-text h3{
+        font-size: 22px;
+      }
+    }
   </style>
 </head>
 <body>
 
 <!-- ══ NAV ══ -->
-
 <nav id="navbar">
   <a href="/home" class="nav-brand">Chrom<em>a</em></a>
 
   <div class="nav-links" id="navLinks">
-    <a th:href="@{/home}"    class="active">Home</a>
+    <!-- Show when logged in -->
+    <span th:if="${session.loggedInUser != null}"
+          style="font-size:0.63rem;letter-spacing:0.15em;color:rgba(255,255,255,0.5);">
+        Hi, <span th:text="${session.loggedInUser.firstName}" style="color:#fff;"></span>
+    </span>
+    <a th:href="@{/home}" class="active">Home</a>
     <a th:href="@{/product}">Store</a>
     <a href="#about">About</a>
     <a href="#contact">Contact</a>
-      <a th:href="@{/login}">Sign In</a>
+    <!-- Show when NOT logged in -->
+    <a th:href="@{/login}" th:if="${session.loggedInUser == null}">Sign In</a>
+    <a th:href="@{/logout}"
+       th:if="${session.loggedInUser != null}"
+       style="color:var(--accent) !important;">Logout</a>
     <a th:href="@{/cart}" class="nav-cta">Cart</a>
   </div>
 
@@ -837,17 +908,16 @@
   </button>
 </nav>
 
-<!-- ══ HERO ══ -->
+<!-- ══ HERO ══ (grid removed, RTX 5090 chip removed) -->
 <section class="hero">
   <div class="hero-left">
-    <div class="hero-eyebrow">// Premium PC Components · Cairo, Egypt</div>
+
     <h1 class="hero-title">
-      Build<br/>
-      <em>Different.</em>
+      Premium<br/>
+      <em>Quality.</em>
     </h1>
     <p class="hero-sub">
-      Curated PC parts for builders who refuse to compromise.
-      From flagship GPUs to silent cooling — every component, precision-selected.
+      Precision selected for builders who refuse to compromise.
     </p>
     <div class="hero-actions">
       <a th:href="@{/product}" class="btn-primary">Browse Parts →</a>
@@ -857,39 +927,21 @@
 
   <div class="hero-right">
     <div class="pc-art">
+      <!-- "RTX 5090" floating chip removed as requested -->
+      <!-- Remaining spec chips (DDR5, PCIe, NVMe) keep design -->
 
-      <!-- Floating spec chips -->
-      <div class="spec-chip" style="top:5%;left:-10%;--ft:3.5s;">RTX 5090</div>
-      <div class="spec-chip" style="top:20%;right:-8%;--ft:4.2s;animation-delay:0.5s">DDR5 64GB</div>
-      <div class="spec-chip" style="bottom:25%;left:-12%;--ft:3.8s;animation-delay:1s">PCIe 5.0</div>
-      <div class="spec-chip" style="bottom:8%;right:-5%;--ft:4.5s;animation-delay:0.3s">2TB NVMe</div>
 
       <!-- PC Case -->
-      <div class="pc-case">
-        <!-- RGB strips -->
-        <div class="pc-strip" style="top:20px;height:80px;--dur:2s;"></div>
-        <div class="pc-strip" style="top:120px;height:60px;--dur:2.5s;animation-delay:0.5s"></div>
-        <div class="pc-strip" style="top:200px;height:40px;--dur:3s;animation-delay:1s"></div>
 
-        <!-- Fans -->
-        <div class="pc-fan" style="width:80px;height:80px;top:30px;right:20px;">
-          <div class="fan-spin" style="--spd:1.2s;"></div>
-        </div>
-        <div class="pc-fan" style="width:60px;height:60px;bottom:50px;right:25px;">
-          <div class="fan-spin" style="--spd:0.9s;"></div>
-        </div>
-
-        <!-- Glass panel -->
-        <div class="pc-glass"></div>
-      </div>
     </div>
   </div>
+  </div>
 
-  <!-- Stats bar -->
-  <div class="hero-stats">
+  <!-- LATER bar -->
+  <!-- <div class="hero-stats">
     <div class="stat">
       <div class="stat-num">500<em>+</em></div>
-      <div class="stat-label">Components</div>
+      <div class="stat-label">Orders</div>
     </div>
     <div class="stat">
       <div class="stat-num">48<em>h</em></div>
@@ -899,7 +951,7 @@
       <div class="stat-num">2<em>yr</em></div>
       <div class="stat-label">Warranty</div>
     </div>
-  </div>
+  </div> -->
 </section>
 
 <!-- ══ MARQUEE ══ -->
@@ -934,7 +986,7 @@
   <div class="section-header">
     <div>
       <div class="section-eyebrow">Shop by Category</div>
-      <h2 class="section-title">What are you<br/>building?</h2>
+      <h2 class="section-title">What are you building?</h2>
     </div>
     <a th:href="@{/product}" class="section-link">View all →</a>
   </div>
@@ -975,22 +1027,21 @@
   </div>
 </section>
 
-<!-- ══ FEATURED BANNER ══ -->
+<!-- ══ FEATURED BANNER (grid removed) ══ -->
 <div class="featured-banner">
   <div class="featured-content">
     <span class="featured-badge">Featured Drop</span>
-    <h2 class="featured-title">Next-Gen<br/>Graphics Cards<br/>Are Here.</h2>
+    <h2 class="featured-title">Next-Gen<br/>CPU Chips<br/>Are Here.</h2>
     <p class="featured-desc">
-      RTX 50-series and RX 9000-series GPUs now in stock.
-      Ray tracing, AI upscaling, and frame generation — all in one build.
+      Core i9 and Ryzen 9 is now in stock.
+      Ray tracing, AI upscaling, and frame generation all in one build.
     </p>
-    <a th:href="@{/product}" class="btn-primary" style="width:fit-content;">Shop GPUs →</a>
+    <a th:href="@{/product}" class="btn-primary" style="width:fit-content;">Shop CPUs →</a>
   </div>
   <div class="featured-art">
     <div class="gpu-art">
       <div class="gpu-fans">
-        <div class="gpu-fan-wrap"><div class="fan-spin" style="--spd:1s;"></div></div>
-        <div class="gpu-fan-wrap"><div class="fan-spin" style="--spd:1.1s;animation-delay:0.2s"></div></div>
+
       </div>
       <div class="gpu-heatsink">
         <div class="heatsink-fin"></div><div class="heatsink-fin"></div>
@@ -1006,36 +1057,70 @@
 <!-- ══ WHY CHROMA ══ -->
 <section class="why-section" id="about">
   <div style="position:relative;z-index:1;">
-    <div class="section-eyebrow" style="color:rgba(192,57,43,0.8)">Why Chroma</div>
+    <div class="section-eyebrow" style="color: 00adb5">Why Chroma</div>
     <h2 class="section-title" style="color:#fff;margin-bottom:0;">Built for builders.</h2>
   </div>
   <div class="why-grid">
     <div class="why-card">
       <div class="why-num">01</div>
       <div class="why-title">Genuine Parts Only</div>
-      <div class="why-desc">Every component is sourced directly from authorized distributors. No grey market, no counterfeits — ever.</div>
+      <div class="why-desc">Every component is sourced directly from authorized distributors. No grey market, no counterfeits ever.</div>
     </div>
     <div class="why-card">
       <div class="why-num">02</div>
-      <div class="why-title">Expert Curation</div>
-      <div class="why-desc">Our team tests and verifies compatibility across every product we list. We build so you can build with confidence.</div>
+      <div class="why-title">Expert Quality Analysis</div>
+      <div class="why-desc">Our team tests and verifies compatibility across every product we list. We build high quality products so you can build with confidence.</div>
     </div>
     <div class="why-card">
       <div class="why-num">03</div>
-      <div class="why-title">Fast Local Delivery</div>
-      <div class="why-desc">Based in Cairo. Most orders ship same-day with careful packaging to make sure your parts arrive perfect.</div>
+      <div class="why-title">Delivery Available Across The Country</div>
+      <div class="why-desc">Based in Cairo. Most orders ship same day with careful packaging to make sure your parts arrive perfect within a short period.</div>
     </div>
   </div>
 </section>
 
 <!-- ══ CTA ══ -->
 <section class="cta-strip" id="contact">
-  <div class="section-eyebrow">Ready to build?</div>
-  <h2 class="cta-title">Your next build<br/>starts <em>here.</em></h2>
-  <p class="cta-sub">Browse hundreds of components. Free shipping on orders over EGP 2,000.</p>
-  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-    <a th:href="@{/product}" class="btn-primary">Start Shopping →</a>
-    <a th:href="@{/register}" class="btn-ghost" style="color:var(--ink);border-color:var(--border);">Create Account</a>
+  <div>
+    <div class="section-eyebrow">Ready to build?</div>
+    <h2 class="cta-title">Your next build<br/>starts <a href="/product"><em>here</em></a></h2>
+    <p class="cta-sub">Free shipping on orders over EGP 8,000.</p>
+  </div>
+</section>
+
+<!-- SUPPORT BAR -->
+<section class="support-bar">
+  <div class="support-left">
+    <h2>We're Always Here To Help</h2>
+    <p>Reach out to us through any of these support channels</p>
+  </div>
+
+  <div class="support-right">
+
+  </div>
+
+  <div class="support-item">
+    <div class="support-icon">
+      <i class="fa-regular fa-envelope"></i>
+    </div>
+
+    <div class="support-text">
+
+      <h3>Chromastore365@gmail.com</h3>
+    </div>
+  </div>
+
+  <div class="support-item">
+    <div class="support-icon">
+      <i class="fa-solid fa-phone"></i>
+    </div>
+
+    <div class="support-text">
+
+      <h3>+20 1555 449 542</h3>
+    </div>
+  </div>
+
   </div>
 </section>
 
@@ -1043,14 +1128,28 @@
 <footer>
   <div>
     <div class="footer-brand">Chroma</div>
-    <div class="footer-sub">// Premium PC Parts · Cairo, Egypt</div>
+    <div class="footer-sub">Cairo, Egypt</div>
   </div>
-  <div class="footer-links">
-    <a th:href="@{/home}">Home</a>
-    <a th:href="@{/product}">Store</a>
-    <a th:href="@{/login}">Sign In</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
+  <div class="SocialMedia">
+    <p class="ConnectStatement">CONNECT WITH US</p>
+
+    <div class="SocialMediaIcons">
+      <a href="#" class="icon-social">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+
+      <a href="#" class="icon-social">
+        <i class="fab fa-x-twitter"></i>
+      </a>
+
+      <a href="#" class="icon-social">
+        <i class="fab fa-instagram"></i>
+      </a>
+
+      <a href="#" class="icon-social">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+    </div>
   </div>
 </footer>
 

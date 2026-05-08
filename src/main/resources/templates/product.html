@@ -412,10 +412,24 @@
 
 <!-- ── NAV ── -->
 <nav>
-  <a href="#" class="nav-brand">Chroma</a>
-  <div class="nav-links">
-    <a href="#" class="active">Shop</a>
-    <a href="#">About</a>
+  <a href="/home" class="nav-brand">Chrom<em>a</em></a>
+<!--  <div class="nav-links">-->
+<!--    <a href="#" class="active">Shop</a>-->
+<!--    <a href="#">About</a>-->
+<!--    <a th:href="@{/cart}" class="nav-cart">-->
+<!--      <span>Cart</span>-->
+<!--      <span id="cart-count" style="background:var(&#45;&#45;paper);color:var(&#45;&#45;ink);padding:0.1rem 0.4rem;font-size:0.6rem;">0</span>-->
+<!--    </a>-->
+<!--  </div>-->
+
+  <div class="nav-links" id="navLinks">
+    <!-- Show when logged in -->
+    <span th:if="${session.loggedInUser != null}"
+          style="font-size:0.63rem;letter-spacing:0.15em;color:rgba(255,255,255,0.5);">
+        Hi, <span th:text="${session.loggedInUser.firstName}" style="color:#fff;"></span>
+    </span>
+    <a th:href="@{/home}" class="active">Home</a>
+    <a th:href="@{/product}">Store</a>
     <a th:href="@{/cart}" class="nav-cart">
       <span>Cart</span>
       <span id="cart-count" style="background:var(--paper);color:var(--ink);padding:0.1rem 0.4rem;font-size:0.6rem;">0</span>
