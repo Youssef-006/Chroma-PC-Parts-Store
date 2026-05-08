@@ -65,4 +65,14 @@ public class CartController {
         model.addAttribute("cart", cart.getProducts());
         return "cart";
     }
+
+    /** Exposes the cart contents to other controllers (e.g. CheckoutController). */
+    public Map<Product, Integer> getCartProducts() {
+        return cart.getProducts();
+    }
+
+    /** Clears the cart after a successful order. */
+    public void clearCart() {
+        cart = new Cart();
+    }
 }

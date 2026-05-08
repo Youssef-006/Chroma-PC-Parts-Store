@@ -12,7 +12,7 @@
     :root {
       --ink:    #0e0e0e;
       --paper:  #f5f2ec;
-      --accent: #c0392b;
+      --accent: #0079b5;
       --muted:  #888070;
       --border: #d4cfc6;
       --field:  #ffffff;
@@ -147,13 +147,13 @@
       justify-content: center;
       flex-shrink: 0;
       background:
-        repeating-linear-gradient(
-          45deg,
-          transparent,
-          transparent 8px,
-          rgba(0,0,0,0.03) 8px,
-          rgba(0,0,0,0.03) 9px
-        );
+              repeating-linear-gradient(
+                      45deg,
+                      transparent,
+                      transparent 8px,
+                      rgba(0,0,0,0.03) 8px,
+                      rgba(0,0,0,0.03) 9px
+              );
     }
 
     .cart-thumb span {
@@ -464,10 +464,10 @@
 <!-- ── NAV ── -->
 <nav>
   <a href="/home" class="nav-brand">Chrom<em>a</em></a>
-<!--  <a href="#" class="nav-brand">Chroma</a>-->
-<!--  <div class="nav-links">-->
-<!--    <a th:href="@{/product}" class="nav-back">← Continue Shopping</a>-->
-<!--  </div>-->
+  <!--  <a href="#" class="nav-brand">Chroma</a>-->
+  <!--  <div class="nav-links">-->
+  <!--    <a th:href="@{/product}" class="nav-back">← Continue Shopping</a>-->
+  <!--  </div>-->
   <div class="nav-links" id="navLinks">
     <!-- Show when logged in -->
     <span th:if="${session.loggedInUser != null}"
@@ -599,7 +599,7 @@
     qtyEl.textContent = qty;
 
     fetch(`/cart/update/${productId}?quantity=${qty}`, { method: 'POST' })
-      .catch(() => {}); // best-effort; recalculate locally anyway
+            .catch(() => {}); // best-effort; recalculate locally anyway
 
     recalculate();
   }
@@ -640,7 +640,7 @@
   }
 
   function checkout() {
-    alert('Checkout flow coming soon!');
+    window.location.href = '/checkout';
   }
 
   // Init totals on load

@@ -12,7 +12,7 @@
         :root {
             --ink:     #0e0e0e;
             --paper:   #f5f2ec;
-            --accent:  #c0392b;
+            --accent:  #0079b5;
             --muted:   #888070;
             --border:  #d4cfc6;
             --field:   #ffffff;
@@ -99,9 +99,9 @@
             animation: spin linear infinite;
         }
         .c1 { inset: 0; animation-duration: 18s; }
-        .c2 { inset: 24px; animation-duration: 13s; animation-direction: reverse; border-color: rgba(192,57,43,0.4); }
+        .c2 { inset: 24px; animation-duration: 13s; animation-direction: reverse; border-color: rgba(0, 121, 181, 0.25); }
         .c3 { inset: 52px; animation-duration: 22s; }
-        .c4 { inset: 80px; animation-duration: 10s; animation-direction: reverse; border-color: rgba(192,57,43,0.6); }
+        .c4 { inset: 80px; animation-duration: 10s; animation-direction: reverse; border-color: rgba(0, 121, 181, 0.25); }
 
         .circle::after {
             content: '';
@@ -115,28 +115,7 @@
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .panel-quote {
-            position: relative;
-            z-index: 1;
-        }
 
-        .panel-quote p {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.4rem;
-            font-weight: 300;
-            color: rgba(255,255,255,0.7);
-            line-height: 1.6;
-            font-style: italic;
-        }
-
-        .panel-quote span {
-            display: block;
-            font-family: 'DM Mono', monospace;
-            font-size: 0.65rem;
-            color: var(--muted);
-            margin-top: 0.75rem;
-            letter-spacing: 0.15em;
-        }
 
         .panel-right {
             display: flex;
@@ -295,7 +274,7 @@
 <div class="panel-left">
     <div class="brand">
         <div class="brand-name">Chroma</div>
-        <div class="brand-tag">// colour your world</div>
+        <div class="brand-tag"></div>
     </div>
 
     <div class="panel-art">
@@ -307,10 +286,6 @@
         </div>
     </div>
 
-    <div class="panel-quote">
-        <p>"Style is a way to say who you are without having to speak."</p>
-        <span>— Rachel Zoe</span>
-    </div>
 </div>
 
 <div class="panel-right">
