@@ -34,4 +34,7 @@ public class User {
     @NotBlank(message = "Password is required")
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private String role = "USER"; // "USER" or "ADMIN"
 }
