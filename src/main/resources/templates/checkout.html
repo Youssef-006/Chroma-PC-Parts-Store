@@ -690,13 +690,13 @@
 <nav>
     <a href="/home" class="nav-brand">Chrom<em>a</em></a>
     <div class="nav-links">
-    <span th:if="${session.loggedInUser != null}"
-          style="font-size:0.63rem;letter-spacing:0.15em;color:rgba(255,255,255,0.5);">
-        Hi, <span th:text="${session.loggedInUser.firstName}" style="color:#fff;"></span>
-    </span>
         <a th:href="@{/home}">Home</a>
         <a th:href="@{/product}">Store</a>
         <a th:href="@{/cart}">Cart</a>
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+          <button type="submit" style="background:none;border:none;cursor:pointer;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.6);font-family:'DM Mono',monospace;padding:0;">Logout</button>
+        </form>
     </div>
 </nav>
 
@@ -840,7 +840,7 @@
             </div>
             <div th:if="${cart == null or cart.isEmpty()}"
                  style="padding:2rem 0;text-align:center;color:var(--muted);font-size:0.72rem;">
-                Your cart is empty.
+                Cannot Order. Your cart is empty!
                 <a th:href="@{/product}" style="color:var(--ink);display:block;margin-top:0.5rem;">Browse Collection →</a>
             </div>
         </div>
@@ -917,19 +917,63 @@
         document.getElementById('paymentMethod').value = method;
     }
 
-    // ── Field validation ──
-    function validate() {
-        const required = ['address', 'city', 'governorate', 'phone'];
-        for (const id of required) {
-            const el = document.getElementById(id);
-            if (!el.value.trim()) {
-                el.style.borderColor = 'var(--accent)';
-                el.focus();
-                el.addEventListener('input', () => el.style.borderColor = '', { once: true });
-                return false;
-            }
+    // ── Field validation ──────────────────────────────────────────────────────
+    function showError(id, message) {
+        const el  = document.getElementById(id);
+        el.style.borderColor = 'var(--accent)';
+        let errEl = document.getElementById(id + '-error');
+        if (!errEl) {
+            errEl = document.createElement('div');
+            errEl.id = id + '-error';
+            errEl.style.cssText = 'color:var(--accent);font-size:0.62rem;margin-top:0.3rem;letter-spacing:0.05em;';
+            el.parentNode.insertBefore(errEl, el.nextSibling);
         }
-        return true;
+        errEl.textContent = message;
+        el.addEventListener('input', () => {
+            el.style.borderColor = '';
+            if (errEl) errEl.textContent = '';
+        }, { once: true });
+    }
+
+    function clearErrors() {
+        document.querySelectorAll('[id$="-error"]').forEach(el => el.textContent = '');
+        document.querySelectorAll('.field-input').forEach(el => el.style.borderColor = '');
+    }
+
+    function validate() {
+        clearErrors();
+        let valid = true;
+
+        const address = document.getElementById('address').value.trim();
+        if (!address) { showError('address', 'Street address is required'); valid = false; }
+
+        const city = document.getElementById('city').value.trim();
+        if (!city) { showError('city', 'City is required'); valid = false; }
+
+        const governorate = document.getElementById('governorate').value.trim();
+        if (!governorate) { showError('governorate', 'Governorate is required'); valid = false; }
+
+        const phone = document.getElementById('phone').value.trim();
+        if (!phone) {
+            showError('phone', 'Phone number is required'); valid = false;
+        } else if (!/^[0-9+\-\s()]{7,20}$/.test(phone)) {
+            showError('phone', 'Enter a valid phone number'); valid = false;
+        }
+
+        const payment = document.getElementById('paymentMethod').value;
+        if (!payment) {
+            // highlight both payment cards
+            document.getElementById('payCard').style.borderColor = 'var(--accent)';
+            document.getElementById('payCash').style.borderColor = 'var(--accent)';
+            valid = false;
+        }
+
+        if (!valid) {
+            // Scroll to the first error
+            const firstErr = document.querySelector('.field-input[style*="accent"]');
+            if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return valid;
     }
 
     // ── Confetti burst ──
@@ -951,7 +995,7 @@
         }
     }
 
-    // ── Place order ──
+    // ── Place order ───────────────────────────────────────────────────────────
     async function placeOrder() {
         if (!validate()) return;
 
@@ -971,12 +1015,11 @@
         };
 
         try {
-            const res = await fetch('/checkout/place-order', {
+            const res  = await fetch('/checkout/place-order', {
                 method:  'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body:    JSON.stringify(payload)
             });
-
             const data = await res.json();
 
             if (res.ok && data.success) {
@@ -984,6 +1027,14 @@
                 const overlay = document.getElementById('successOverlay');
                 overlay.classList.add('show');
                 setTimeout(burst, 200);
+            } else if (data.fieldErrors) {
+                // Server returned field-level validation errors
+                Object.entries(data.fieldErrors).forEach(([field, msg]) => {
+                    const el = document.getElementById(field);
+                    if (el) showError(field, msg);
+                });
+                btn.disabled = false;
+                btnText.textContent = 'Place Order →';
             } else {
                 alert(data.message || 'Something went wrong. Please try again.');
                 btn.disabled = false;

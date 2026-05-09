@@ -133,7 +133,7 @@
     ══════════════════════════════════════ */
     .hero {
       min-height: 100vh;
-      background-image: url('/images/home/gpu.png');
+      background-image: url('/images/gpu.png');
       display: grid;
       grid-template-columns: 1fr 1fr;
       padding-top: 64px;
@@ -516,7 +516,7 @@
     ══════════════════════════════════════ */
     .featured-banner {
       margin: 0 3rem 5rem;
-      background-image: url("/images/home/cpu.png");
+      background-image: url("/images/cpu.png");
       display: grid;
       grid-template-columns: 1fr 1fr;
       position: relative;
@@ -886,20 +886,24 @@
   <a href="/home" class="nav-brand">Chrom<em>a</em></a>
 
   <div class="nav-links" id="navLinks">
-    <!-- Show when logged in -->
-    <span th:if="${session.loggedInUser != null}"
+    <!-- Show logged-in user name via Spring Security -->
+    <span th:if="${#authorization.expression('isAuthenticated()')}"
           style="font-size:0.63rem;letter-spacing:0.15em;color:rgba(255,255,255,0.5);">
-        Hi, <span th:text="${session.loggedInUser.firstName}" style="color:#fff;"></span>
+        Hi, <span th:text="${#authentication.name}" style="color:#fff;"></span>
     </span>
     <a th:href="@{/home}" class="active">Home</a>
     <a th:href="@{/product}">Store</a>
+    <a th:href="@{/orders}" th:if="${#authorization.expression('isAuthenticated()')}">My Orders</a>
     <a href="#about">About</a>
     <a href="#contact">Contact</a>
-    <!-- Show when NOT logged in -->
-    <a th:href="@{/login}" th:if="${session.loggedInUser == null}">Sign In</a>
-    <a th:href="@{/logout}"
-       th:if="${session.loggedInUser != null}"
-       style="color:var(--accent) !important;">Logout</a>
+    <!-- Sign In when NOT logged in -->
+    <a th:href="@{/login}" th:if="${!#authorization.expression('isAuthenticated()')}">Sign In</a>
+    <!-- POST logout via Spring Security -->
+    <form th:if="${#authorization.expression('isAuthenticated()')}"
+          th:action="@{/logout}" method="post" style="display:inline;">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+      <button type="submit" style="background:none;border:none;cursor:pointer;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);font-family:'DM Mono',monospace;padding:0;">Logout</button>
+    </form>
     <a th:href="@{/cart}" class="nav-cta">Cart</a>
   </div>
 

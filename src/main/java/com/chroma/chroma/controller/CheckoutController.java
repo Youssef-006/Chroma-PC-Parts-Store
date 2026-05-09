@@ -1,145 +1,105 @@
 package com.chroma.chroma.controller;
 
-import com.chroma.chroma.model.Cart;
+import com.chroma.chroma.dto.CheckoutDTO;
+import com.chroma.chroma.model.Order;
 import com.chroma.chroma.model.Product;
 import com.chroma.chroma.model.User;
+import com.chroma.chroma.service.AsyncEmailService;
+import com.chroma.chroma.service.OrderService;
+import com.chroma.chroma.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/checkout")
-public class CheckoutController {
+    public class CheckoutController {
 
-    private final JavaMailSender mailSender;
     private final CartController cartController;
+    private final UserService userService;
+    private final OrderService orderService;
+    private final AsyncEmailService asyncEmailService;   // ← async, non-blocking
 
-    // ─── GET /checkout → checkout.html ───────────────────────────────────────
     @GetMapping
     public String showCheckout(HttpSession session, Model model) {
-        if (session.getAttribute("loggedInUser") == null) {
-            return "redirect:/login";
-        }
-        // Expose the same cart map used by CartController
-        model.addAttribute("cart", cartController.getCartProducts());
+        model.addAttribute("cart", cartController.getCartProducts(session));
         return "checkout";
     }
 
-    // ─── POST /checkout/place-order ──────────────────────────────────────────
     @PostMapping("/place-order")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> placeOrder(
-            @RequestBody Map<String, Object> payload,
-            HttpSession session) {
+            @Valid @RequestBody CheckoutDTO dto,
+            BindingResult bindingResult,
+            HttpSession session,
+            HttpServletResponse response,
+            Authentication authentication) {
 
-        User user = (User) session.getAttribute("loggedInUser");
-        if (user == null) {
+        // ── Auth check ────────────────────────────────────────────────────────
+        if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(401)
                     .body(Map.of("success", false, "message", "Not logged in."));
         }
 
-        // Extract fields
-        String address       = str(payload, "address");
-        String apt           = str(payload, "apt");
-        String city          = str(payload, "city");
-        String governorate   = str(payload, "governorate");
-        String phone         = str(payload, "phone");
-        boolean leaveAtDoor  = Boolean.TRUE.equals(payload.get("leaveAtDoor"));
-        String paymentMethod = str(payload, "paymentMethod");
-
-        // Build order summary from cart
-        Map<Product, Integer> cartItems = cartController.getCartProducts();
-        StringBuilder itemLines = new StringBuilder();
-        double total = 0;
-
-        for (Map.Entry<Product, Integer> entry : cartItems.entrySet()) {
-            Product p = entry.getKey();
-            int qty   = entry.getValue();
-            double lineTotal = p.getPrice() * qty;
-            total += lineTotal;
-            itemLines.append(String.format(
-                    "  • %s (x%d) — EGP %.2f%n", p.getName(), qty, lineTotal));
+        // ── Bean Validation errors → return field-level messages ──────────────
+        if (bindingResult.hasErrors()) {
+            Map<String, Object> errors = new HashMap<>();
+            errors.put("success", false);
+            errors.put("message", "Please fix the errors below.");
+            Map<String, String> fieldErrors = new HashMap<>();
+            bindingResult.getFieldErrors()
+                    .forEach(e -> fieldErrors.put(e.getField(), e.getDefaultMessage()));
+            errors.put("fieldErrors", fieldErrors);
+            return ResponseEntity.badRequest().body(errors);
         }
 
-        // ─── Send confirmation email ───────────────────────────────────────
-        try {
-            String fullAddress = address
-                    + (apt.isBlank() ? "" : ", " + apt)
-                    + ", " + city + ", " + governorate;
-
-            String emailBody = String.format("""
-                    Hi %s,
- 
-                    Thank you for your order with Chroma! 🎉
- 
-                    ─────────────────────────────
-                    ORDER CONFIRMATION
-                    ─────────────────────────────
- 
-                    📦 Items Ordered:
-                    %s
-                    ─────────────────────────────
-                    Total: EGP %.2f
-                    Shipping: Free
-                    ─────────────────────────────
- 
-                    📍 Delivery Address:
-                       %s
- 
-                    📱 Contact Number: %s
-                    🚪 Leave at Door: %s
-                    💳 Payment: %s
- 
-                    ─────────────────────────────
- 
-                    Your order is being processed and you'll receive
-                    a shipping update soon.
- 
-                    Thank you for shopping with Chroma.
-                    — The Chroma Team
-                    """,
-                    user.getFirstName(),
-                    itemLines,
-                    total,
-                    fullAddress,
-                    phone,
-                    leaveAtDoor ? "Yes" : "No",
-                    paymentMethod.equalsIgnoreCase("cash") ? "Cash on Delivery" : "Credit / Debit Card"
-            );
-
-            SimpleMailMessage mail = new SimpleMailMessage();
-            mail.setTo(user.getEmail());
-            mail.setSubject("Chroma — Order Confirmation");
-            mail.setText(emailBody);
-            mail.setFrom("no-reply@chroma-store.com");
-
-            mailSender.send(mail);
-
-        } catch (Exception e) {
-            // Email failed — still confirm the order; log the error
-            System.err.println("[Chroma] Email send failed: " + e.getMessage());
+        // ── Resolve user ──────────────────────────────────────────────────────
+        User user = userService.findByEmail(authentication.getName()).orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(401)
+                    .body(Map.of("success", false, "message", "User not found."));
         }
 
-        // Clear the cart after successful order
-        cartController.clearCart();
+        // ── Cart check ────────────────────────────────────────────────────────
+        Map<Product, Integer> cartItems = cartController.getCartProducts(session);
+        if (cartItems.isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("success", false, "message", "Cannot Order, your cart is empty!"));
+        }
+
+        // ── Build full address ────────────────────────────────────────────────
+        String fullAddress = dto.getAddress()
+                + (dto.getApt() == null || dto.getApt().isBlank() ? "" : ", " + dto.getApt());
+
+        // ── Persist order ─────────────────────────────────────────────────────
+        Order order = orderService.placeOrder(
+                user, cartItems,
+                fullAddress, dto.getCity(), dto.getGovernorate(),
+                dto.getPhone(), dto.getPaymentMethod(), dto.isLeaveAtDoor()
+        );
+
+        // ── Send email on background thread (multithreading) ──────────────────
+        // Returns immediately — email is dispatched to the emailExecutor pool
+        asyncEmailService.sendOrderConfirmation(user, order, fullAddress);
+
+        // ── Clear cart ────────────────────────────────────────────────────────
+        cartController.clearCart(session, response);
 
         return ResponseEntity.ok(Map.of(
                 "success", true,
-                "email", user.getEmail()
+                "orderId", order.getId(),
+                "email",   user.getEmail()
         ));
-    }
-
-    // ── Helper ────────────────────────────────────────────────────────────────
-    private String str(Map<String, Object> map, String key) {
-        Object v = map.get(key);
-        return v == null ? "" : v.toString().trim();
     }
 }
