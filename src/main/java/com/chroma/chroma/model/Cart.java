@@ -1,7 +1,9 @@
 package com.chroma.chroma.model;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-public class Cart {
+public class Cart implements Serializable {
+    private static final long serialVersionUID = 1L;
     //cart
     private Map<Product, Integer> products = new HashMap<>();
 
