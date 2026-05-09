@@ -12,7 +12,7 @@
         :root {
             --ink:    #0e0e0e;
             --paper:  #f5f2ec;
-            --accent: #0079b5;
+            --accent: #c0392b;
             --muted:  #888070;
             --border: #d4cfc6;
             --field:  #ffffff;
@@ -690,13 +690,13 @@
 <nav>
     <a href="/home" class="nav-brand">Chrom<em>a</em></a>
     <div class="nav-links">
-    <span th:if="${session.loggedInUser != null}"
-          style="font-size:0.63rem;letter-spacing:0.15em;color:rgba(255,255,255,0.5);">
-        Hi, <span th:text="${session.loggedInUser.firstName}" style="color:#fff;"></span>
-    </span>
         <a th:href="@{/home}">Home</a>
         <a th:href="@{/product}">Store</a>
         <a th:href="@{/cart}">Cart</a>
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+          <button type="submit" style="background:none;border:none;cursor:pointer;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.6);font-family:'DM Mono',monospace;padding:0;">Logout</button>
+        </form>
     </div>
 </nav>
 
