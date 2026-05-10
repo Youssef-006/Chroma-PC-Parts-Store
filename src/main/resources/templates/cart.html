@@ -645,7 +645,15 @@
   }
 
   // Init totals on load
-  window.addEventListener('DOMContentLoaded', recalculate);
+  window.addEventListener('DOMContentLoaded', () => {
+    recalculate();
+    fetch('/cart/count')
+      .then(r => r.json())
+      .then(count => {
+        document.getElementById('cart-count').textContent = count;
+      })
+      .catch(() => {});
+  });
 </script>
 
 </body>

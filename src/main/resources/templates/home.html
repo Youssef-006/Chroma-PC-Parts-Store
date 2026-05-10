@@ -889,7 +889,7 @@
     <!-- Show logged-in user name via Spring Security -->
     <span th:if="${#authorization.expression('isAuthenticated()')}"
           style="font-size:0.63rem;letter-spacing:0.15em;color:rgba(255,255,255,0.5);">
-        Hi, <span th:text="${#authentication.name}" style="color:#fff;"></span>
+        Hi, <span th:text="${firstName}" style="color:#fff;"></span>
     </span>
     <a th:href="@{/home}" class="active">Home</a>
     <a th:href="@{/product}">Store</a>

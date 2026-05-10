@@ -96,6 +96,14 @@ public class CartController {
         return "Updated";
     }
 
+    // ── GET /cart/count → returns total item count ───────────────────────────
+    @GetMapping("/count")
+    @ResponseBody
+    public int getCartCount(HttpServletRequest request, HttpSession session) {
+        Cart cart = getCart(request, session);
+        return cart.getProducts().values().stream().mapToInt(Integer::intValue).sum();
+    }
+
     // ── For CheckoutController ────────────────────────────────────────────────
     public Map<Product, Integer> getCartProducts(HttpSession session) {
         Cart cart = (Cart) session.getAttribute("cart");
