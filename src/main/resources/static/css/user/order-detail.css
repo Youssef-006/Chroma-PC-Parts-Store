@@ -1,0 +1,40 @@
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root {
+      --ink:    #0e0e0e;
+      --paper:  #f5f2ec;
+      --accent: #0079b5;
+      --muted:  #888070;
+      --border: #d4cfc6;
+      --field:  #ffffff;
+      --success:#2e7d32;
+    }
+    body { font-family:'DM Mono',monospace; background:var(--paper); color:var(--ink); min-height:100vh; }
+    nav { background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:space-between; padding:0 2.5rem; height:56px; }
+    .nav-brand { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:300; letter-spacing:0.2em; color:#fff; text-decoration:none; }
+    .nav-brand em { color:var(--accent); font-style:normal; }
+    .nav-links { display:flex; align-items:center; gap:2rem; }
+    .nav-links a { font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.6); text-decoration:none; }
+    .nav-links a:hover { color:#fff; }
+    .nav-links form button { background:none; border:none; cursor:pointer; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.6); font-family:'DM Mono',monospace; padding:0; }
+    .container { max-width:900px; margin:3rem auto; padding:0 2rem; }
+    .back { font-size:0.65rem; color:var(--muted); text-decoration:none; letter-spacing:0.1em; display:inline-block; margin-bottom:1.5rem; }
+    .back:hover { color:var(--ink); }
+    .page-title { font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:400; margin-bottom:2rem; }
+    .grid { display:grid; grid-template-columns:1fr 280px; gap:1.5rem; align-items:start; }
+    .card { background:#fff; border:1px solid var(--border); padding:1.5rem; margin-bottom:1.5rem; }
+    .card h2 { font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:400; margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid var(--border); }
+    table { width:100%; border-collapse:collapse; font-size:0.72rem; }
+    th { background:var(--ink); color:#fff; padding:0.6rem 0.8rem; text-align:left; font-size:0.58rem; letter-spacing:0.15em; text-transform:uppercase; font-weight:400; }
+    td { padding:0.65rem 0.8rem; border-bottom:1px solid var(--border); }
+    tr:last-child td { border-bottom:none; }
+    .total-row td { font-weight:bold; background:#faf9f6; }
+    .info-row { display:flex; justify-content:space-between; padding:0.4rem 0; font-size:0.72rem; border-bottom:1px solid #f0ede8; }
+    .info-row:last-child { border-bottom:none; }
+    .info-label { color:var(--muted); }
+    .badge { display:inline-block; padding:0.3rem 0.8rem; font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.5rem; }
+    .badge-pending    { background:#fff3cd; color:#856404; }
+    .badge-processing { background:#cfe2ff; color:#0a58ca; }
+    .badge-shipped    { background:#d1ecf1; color:#0c5460; }
+    .badge-delivered  { background:#d4edda; color:#155724; }
+    .badge-cancelled  { background:#f8d7da; color:#721c24; }
+    .status-note { font-size:0.65rem; color:var(--muted); margin-top:0.5rem; }
