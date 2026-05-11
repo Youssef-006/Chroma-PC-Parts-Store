@@ -1,4 +1,4 @@
-//AuthenticationController Update
+//Update Code
 package com.chroma.chroma.controller;
 
 import com.chroma.chroma.dto.RegisterDTO;
