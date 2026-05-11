@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Chroma — Build Different</title>
+  <title>Chroma</title>
+  <link rel="icon" href="/images/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
   <link rel="stylesheet"
@@ -609,7 +610,7 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: 3rem;
       font-weight: 300;
-      color: rgba(43, 80, 192, 0.484);
+      color: var(--accent);
       line-height: 1;
       margin-bottom: 1rem;
     }
@@ -996,32 +997,36 @@
   </div>
 
   <div class="category-grid">
-    <a th:href="@{/product}" class="cat-card">
-      <div class="cat-icon">🖥️</div>
+    <a th:href="@{/product}" class="cat-card"
+       style="background-image:url('/images/BTNCPU.jpg');">
+      <div class="cat-icon"></div>
       <div class="cat-body">
         <div class="cat-name">CPUs</div>
         <div class="cat-count">All brands</div>
       </div>
       <div class="cat-accent-bar"></div>
     </a>
-    <a th:href="@{/product}" class="cat-card">
-      <div class="cat-icon">🎮</div>
+    <a th:href="@{/product}" class="cat-card"
+       style="background-image:url('/images/BTNGPU.jpg');">
+      <div class="cat-icon"></div>
       <div class="cat-body">
         <div class="cat-name">GPUs</div>
         <div class="cat-count">NVIDIA · AMD</div>
       </div>
       <div class="cat-accent-bar"></div>
     </a>
-    <a th:href="@{/product}" class="cat-card">
-      <div class="cat-icon">⚡</div>
+    <a th:href="@{/product}" class="cat-card"
+       style="background-image:url('/images/BTNFB.jpg');">
+      <div class="cat-icon"></div>
       <div class="cat-body">
-        <div class="cat-name">Storage</div>
-        <div class="cat-count">NVMe · SSD · HDD</div>
+        <div class="cat-name">Full Builds</div>
+        <div class="cat-count">Big Custom PCs</div>
       </div>
       <div class="cat-accent-bar"></div>
     </a>
-    <a th:href="@{/product}" class="cat-card">
-      <div class="cat-icon">❄️</div>
+    <a th:href="@{/product}" class="cat-card"
+       style="background-image:url('/images/BTNCOOLING.jpg');">
+      <div class="cat-icon"></div>
       <div class="cat-body">
         <div class="cat-name">Cooling</div>
         <div class="cat-count">AIO · Air · Fans</div>
