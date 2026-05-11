@@ -1,3 +1,4 @@
+//updated
 package com.chroma.chroma.controller;
 
 import com.chroma.chroma.model.Product;
@@ -12,7 +13,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/product")
 @CrossOrigin
-public class ProductController {
+public class  ProductController {
 
     @Autowired
     ProductRepo repo;
