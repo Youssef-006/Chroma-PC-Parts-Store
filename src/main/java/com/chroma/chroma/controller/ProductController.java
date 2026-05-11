@@ -1,4 +1,4 @@
-//updated
+//updated product
 package com.chroma.chroma.controller;
 
 import com.chroma.chroma.model.Product;
